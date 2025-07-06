@@ -759,7 +759,7 @@ html {
   height: 100vh;
   background: 
     linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.3)),
-    url('https://images.unsplash.com/photo-1544551763-46a013bb70d5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80') center/cover no-repeat;
+    url('https://unsplash.com/photos/body-of-water-apax4M-4kFI') center/cover no-repeat;
   display: flex;
   align-items: center;
   position: relative;
@@ -1028,7 +1028,7 @@ html {
   transform: translateX(-50%);
   text-align: center;
   color: white;
-  background: rgba(0, 0, 0, 0.7);
+  background: darkslategrey;
   padding: 1rem 2rem;
   border-radius: var(--radius-lg);
   backdrop-filter: blur(10px);
@@ -1039,6 +1039,7 @@ html {
   margin: 0 0 0.5rem 0;
   font-size: 1.2rem;
   font-weight: 600;
+  color: white;
 }
 
 .modal-info p {
