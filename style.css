@@ -759,7 +759,7 @@ html {
   height: 100vh;
   background: 
     linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.3)),
-    url('https://unsplash.com/photos/body-of-water-apax4M-4kFI') center/cover no-repeat;
+    url('https://images.unsplash.com/photos/body-of-water-apax4M-4kFI?auto=format&fit=crop&w=2070&q=80') center/cover no-repeat;
   display: flex;
   align-items: center;
   position: relative;
