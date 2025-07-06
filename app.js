@@ -63,7 +63,143 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Photo Placeholder Interactions
+    // Image Gallery Modal Functionality
+    const imageModal = document.getElementById('imageModal');
+    const modalImage = document.getElementById('modalImage');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalDescription = document.getElementById('modalDescription');
+    const modalCounter = document.getElementById('modalCounter');
+    const modalClose = document.getElementById('modalClose');
+    const modalPrev = document.getElementById('modalPrev');
+    const modalNext = document.getElementById('modalNext');
+    const photoItems = document.querySelectorAll('.photo-item');
+    
+    let currentImageIndex = 0;
+    let imageData = [];
+    
+    // Collect image data from photo items
+    photoItems.forEach((item, index) => {
+        const img = item.querySelector('.photo-img');
+        const overlay = item.querySelector('.photo-overlay');
+        const title = overlay ? overlay.querySelector('h3')?.textContent : '';
+        const description = overlay ? overlay.querySelector('p')?.textContent : '';
+        
+        imageData.push({
+            src: item.dataset.image,
+            alt: img.alt,
+            title: title,
+            description: description
+        });
+        
+        // Add click event listener to each photo item
+        item.addEventListener('click', function() {
+            currentImageIndex = index;
+            openModal();
+        });
+    });
+    
+    function openModal() {
+        if (imageData.length === 0) return;
+        
+        updateModalContent();
+        imageModal.classList.add('show');
+        document.body.style.overflow = 'hidden'; // Prevent background scrolling
+    }
+    
+    function closeModal() {
+        imageModal.classList.remove('show');
+        document.body.style.overflow = ''; // Restore scrolling
+    }
+    
+    function updateModalContent() {
+        const currentImage = imageData[currentImageIndex];
+        if (!currentImage) return;
+        
+        modalImage.src = currentImage.src;
+        modalImage.alt = currentImage.alt;
+        modalTitle.textContent = currentImage.title;
+        modalDescription.textContent = currentImage.description;
+        modalCounter.textContent = `${currentImageIndex + 1} van ${imageData.length}`;
+        
+        // Update navigation button states
+        modalPrev.style.opacity = currentImageIndex === 0 ? '0.5' : '1';
+        modalNext.style.opacity = currentImageIndex === imageData.length - 1 ? '0.5' : '1';
+    }
+    
+    function goToPrevImage() {
+        if (currentImageIndex > 0) {
+            currentImageIndex--;
+            updateModalContent();
+        }
+    }
+    
+    function goToNextImage() {
+        if (currentImageIndex < imageData.length - 1) {
+            currentImageIndex++;
+            updateModalContent();
+        }
+    }
+    
+    // Modal event listeners
+    modalClose.addEventListener('click', closeModal);
+    modalPrev.addEventListener('click', goToPrevImage);
+    modalNext.addEventListener('click', goToNextImage);
+    
+    // Close modal when clicking outside the image
+    imageModal.addEventListener('click', function(e) {
+        if (e.target === imageModal) {
+            closeModal();
+        }
+    });
+    
+    // Keyboard navigation
+    document.addEventListener('keydown', function(e) {
+        if (!imageModal.classList.contains('show')) return;
+        
+        switch(e.key) {
+            case 'Escape':
+                closeModal();
+                break;
+            case 'ArrowLeft':
+                e.preventDefault();
+                goToPrevImage();
+                break;
+            case 'ArrowRight':
+                e.preventDefault();
+                goToNextImage();
+                break;
+        }
+    });
+    
+    // Touch/swipe support for mobile
+    let touchStartX = 0;
+    let touchEndX = 0;
+    
+    imageModal.addEventListener('touchstart', function(e) {
+        touchStartX = e.changedTouches[0].screenX;
+    });
+    
+    imageModal.addEventListener('touchend', function(e) {
+        touchEndX = e.changedTouches[0].screenX;
+        handleSwipe();
+    });
+    
+    function handleSwipe() {
+        const swipeThreshold = 50;
+        const swipeDistance = touchEndX - touchStartX;
+        
+        if (Math.abs(swipeDistance) > swipeThreshold) {
+            if (swipeDistance > 0) {
+                // Swipe right - go to previous image
+                goToPrevImage();
+            } else {
+                // Swipe left - go to next image
+                goToNextImage();
+            }
+        }
+    }
+
+    // Photo Placeholder Interactions (for any remaining placeholders)
     const photoPlaceholders = document.querySelectorAll('.photo-placeholder');
     photoPlaceholders.forEach(placeholder => {
         placeholder.addEventListener('click', function() {
@@ -270,7 +406,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }, observerOptions);
     
     // Observe elements for animation
-    const animatedElements = document.querySelectorAll('.attraction-card, .detail-card, .contact-item, .photo-placeholder');
+    const animatedElements = document.querySelectorAll('.attraction-card, .detail-card, .contact-item, .photo-placeholder, .photo-item');
     animatedElements.forEach(el => {
         el.style.opacity = '0';
         el.style.transform = 'translateY(30px)';
